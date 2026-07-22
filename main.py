@@ -1,8 +1,12 @@
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from scalar_fastapi import get_scalar_api_reference
 
 app = FastAPI()
+
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
 
@@ -34,7 +38,9 @@ posts: list[dict] = [
 @app.get("/", include_in_schema=False)
 @app.get("/posts", include_in_schema=False)
 def index(request: Request):
-    return templates.TemplateResponse(request, "index.html")
+    return templates.TemplateResponse(
+        request, "index.html", {"posts": posts, "title": "Home"}
+    )
 
 
 @app.get("/scalar_docs", include_in_schema=False)
