@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from scalar_fastapi import get_scalar_api_reference
@@ -41,6 +41,21 @@ def index(request: Request):
     return templates.TemplateResponse(
         request, "index.html", {"posts": posts, "title": "Home"}
     )
+
+
+@app.get("/api/posts")
+def get_posts():
+    return posts
+
+
+@app.get("/api/posts/{id}")
+def get_post(id: int):
+    post = next((post for post in posts if post.get("id") == id), None)
+    if not post:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Post not found."
+        )
+    return post
 
 
 @app.get("/scalar_docs", include_in_schema=False)
