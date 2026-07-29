@@ -72,6 +72,22 @@ def get_posts():
     return posts
 
 
+@app.post(
+    "/api/posts", response_model=PostResponse, status_code=status.HTTP_201_CREATED
+)
+def create_post(post: PostCreate):
+    new_id = max(p["id"] for p in posts) + 1 if post else 1
+    new_post = {
+        "id": new_id,
+        "title": post.title,
+        "content": post.content,
+        "author": post.author,
+        "date_posted": "July 29, 2026",
+    }
+    posts.append(new_post)
+    return new_post
+
+
 @app.get("/api/posts/{id}", response_model=PostResponse)
 def get_post(id: int):
     post = next((post for post in posts if post.get("id") == id), None)
