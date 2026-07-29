@@ -3,12 +3,14 @@ from fastapi.exception_handlers import (
     http_exception_handler,
     request_validation_exception_handler,
 )
-from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from scalar_fastapi import get_scalar_api_reference
 from starlette.exceptions import HTTPException as StarletteException
+
+from schemas import PostCreate, PostResponse
 
 app = FastAPI()
 
@@ -65,12 +67,12 @@ def post_page(id: int, request: Request):
     )
 
 
-@app.get("/api/posts/")
+@app.get("/api/posts/", response_model=list[PostResponse])
 def get_posts():
     return posts
 
 
-@app.get("/api/posts/{id}")
+@app.get("/api/posts/{id}", response_model=PostResponse)
 def get_post(id: int):
     post = next((post for post in posts if post.get("id") == id), None)
     if not post:
