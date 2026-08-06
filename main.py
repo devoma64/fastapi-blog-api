@@ -7,7 +7,6 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from scalar_fastapi import get_scalar_api_reference
 from starlette.exceptions import HTTPException as StarletteException
 
 from schemas import PostCreate, PostResponse
@@ -36,6 +35,13 @@ posts: list[dict] = [
     {
         "id": 3,
         "author": "Jane Smith",
+        "title": "Why I Love APIs",
+        "content": "REST APIs connect applications seamlessly.",
+        "date_posted": "July 24, 2026",
+    },
+    {
+        "id": 4,
+        "author": "Marvelous Won",
         "title": "Why I Love APIs",
         "content": "REST APIs connect applications seamlessly.",
         "date_posted": "July 24, 2026",
@@ -72,11 +78,10 @@ def get_posts():
     return posts
 
 
-@app.post(
-    "/api/posts", response_model=PostResponse, status_code=status.HTTP_201_CREATED
-)
+@app.post("/api/posts", response_model=PostResponse)
 def create_post(post: PostCreate):
-    new_id = max(p["id"] for p in posts) + 1 if post else 1
+    new_id = max((p["id"] for p in posts), default=1) + 1
+
     new_post = {
         "id": new_id,
         "title": post.title,
@@ -137,8 +142,3 @@ def validation_exception_handler(request: Request, exception: RequestValidationE
         },
         status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
     )
-
-
-@app.get("/scalar_docs", include_in_schema=False)
-def get_scalar_docs():
-    return get_scalar_api_reference(openapi_url=app.openapi_url, title="BLOG | API")
