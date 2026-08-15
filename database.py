@@ -8,7 +8,7 @@ engine = create_engine(
     connect_args={"check_same_thread": False},
 )
 
-SessionLocal = sessionmaker(bind=engine, autocomit=False, autoflush=False)
+SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 
 class Base(DeclarativeBase):

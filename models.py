@@ -29,15 +29,29 @@ class User(Base):
 
 class Post(Base):
     __tablename__ = "posts"
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     title: Mapped[str] = mapped_column(String(100), nullable=False)
     content: Mapped[str] = mapped_column(Text, nullable=False)
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("user.id"), nullable=False, index=True
+        ForeignKey("users.id"), nullable=False, index=True
     )
 
     date_posted: Mapped[datetime] = mapped_column(
-        default_factory=lambda: datetime.now(timezone.utc)
+        default=lambda: datetime.now(timezone.utc)
     )
 
     author: Mapped[User] = relationship(back_populates="posts")
+
+
+# class Comment(Base):
+#     __tablename__ = "comments"
+
+#     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+#     comment: Mapped[str] = mapped_column(String(100), nullable=False)
+#     user_id: Mapped[int] = mapped_column(
+#         ForeignKey("user.id"), nullable=False, index=True
+#     )
+#     post_id: Mapped[int] = mapped_column(
+#         ForeignKey("post.id"), nullable=False, index=True
+#     )
