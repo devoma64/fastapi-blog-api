@@ -18,7 +18,7 @@ class User(Base):
         String(200), nullable=True, default=None
     )
 
-    posts: Mapped[list[Post]] = relationship(back_populates="author")
+    posts: Mapped[list[Post]] = relationship(back_populates="author", cascade="all, delete-orphan")
 
     @property
     def image_path(self) -> str:
@@ -42,16 +42,3 @@ class Post(Base):
     )
 
     author: Mapped[User] = relationship(back_populates="posts")
-
-
-# class Comment(Base):
-#     __tablename__ = "comments"
-
-#     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-#     comment: Mapped[str] = mapped_column(String(100), nullable=False)
-#     user_id: Mapped[int] = mapped_column(
-#         ForeignKey("user.id"), nullable=False, index=True
-#     )
-#     post_id: Mapped[int] = mapped_column(
-#         ForeignKey("post.id"), nullable=False, index=True
-#     )

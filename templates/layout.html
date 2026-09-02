@@ -53,9 +53,6 @@
 
         <link rel="manifest" href="{{url_for('static', path='site.webmanifest')}}">
 
-        <!-- Content Security Policy: Uncomment to enhance security by restricting where content can be loaded from (useful for preventing certain attacks like XSS). Update if adding external sources (e.g., Google Fonts, Bootstrap CDN, analytics, etc). -->
-        <!-- <meta http-equiv="Content-Security-Policy"
-       content=" default-src 'self'; script-src 'self' code.jquery.com; style-src 'self' fonts.googleapis.com; font-src fonts.gstatic.com; img-src 'self' images.examplecdn.com; "> -->
     </head>
     
     <body class="d-flex flex-column min-vh-100">
@@ -63,7 +60,7 @@
             <nav class="navbar navbar-expand-md bg-steel fixed-top"
                  data-bs-theme="dark">
                 <div class="container">
-                    <a class="navbar-brand me-4" href="">FastAPI Blog</a>
+                    <a class="navbar-brand me-4" href="{{url_for('index')}}">FastAPI Blog</a>
                     <button class="navbar-toggler"
                             type="button"
                             data-bs-toggle="collapse"
@@ -77,7 +74,7 @@
                         <div class="navbar-nav me-auto">
                             <a class="nav-link active"
                                aria-current="page"
-                               href="">Home</a>
+                               href="{{url_for('index')}}">Home</a>
                         </div>
                         <!-- Navbar Right Side -->
                         <div class="navbar-nav">
